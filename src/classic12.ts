@@ -60,7 +60,7 @@ const createMinuteHand = () => {
   Object.entries({
     x1: "0",
     y1: "0",
-    stroke: "red",
+    stroke: "black",
     "stroke-width": "5",
     "stroke-linecap": "round",
   }).forEach(([k, v]) => minuteHand.setAttribute(k, v));
@@ -75,7 +75,7 @@ const createHourHand = () => {
   Object.entries({
     x1: "0",
     y1: "0",
-    stroke: "red",
+    stroke: "black",
     "stroke-width": "5",
     "stroke-linecap": "round",
   }).forEach(([k, v]) => hourHand.setAttribute(k, v));
@@ -90,12 +90,34 @@ const createClockFace = () => {
   Object.entries({
     cx: "0",
     cy: "0",
-    r: "75",
-    stroke: "red",
+    r: "95",
+    stroke: "black",
     fill: "transparent",
     "stroke-width": "5",
   }).forEach(([k, v]) => clockFace.setAttribute(k, v));
   return clockFace;
+};
+
+const createHourMarkers = () => {
+  const markers = new Array(12)
+    .fill(null)
+    .map(() => document.createElementNS("http://www.w3.org/2000/svg", "line"));
+
+  markers.forEach((marker, i) => {
+    const ratio = i / 12;
+    const x = Math.sin(ratio * Math.PI * 2);
+    const y = -Math.cos(ratio * Math.PI * 2);
+    Object.entries({
+      x1: (95 * x).toString(),
+      x2: (90 * x).toString(),
+      y1: (95 * y).toString(),
+      y2: (90 * y).toString(),
+      stroke: "black",
+      "stroke-width": "5",
+      "stroke-linecap": "round",
+    }).forEach(([k, v]) => marker.setAttribute(k, v));
+  });
+  return markers;
 };
 
 /**
@@ -109,10 +131,10 @@ const updateHandPositions = (
 ) => {
   const { hourX, hourY, minuteX, minuteY } = getHandPositions(new Date());
 
-  hourHand.setAttribute("x2", (45 * hourX).toString());
-  hourHand.setAttribute("y2", (45 * hourY).toString());
-  minuteHand.setAttribute("x2", (65 * minuteX).toString());
-  minuteHand.setAttribute("y2", (65 * minuteY).toString());
+  hourHand.setAttribute("x2", (60 * hourX).toString());
+  hourHand.setAttribute("y2", (60 * hourY).toString());
+  minuteHand.setAttribute("x2", (80 * minuteX).toString());
+  minuteHand.setAttribute("y2", (80 * minuteY).toString());
 };
 
 /**
@@ -125,19 +147,15 @@ export const Classic12 = () => {
   const hourHand = createHourHand();
   const minuteHand = createMinuteHand();
 
-  svg.appendChild(createClockFace());
-  svg.appendChild(hourHand);
-  svg.appendChild(minuteHand);
-
   updateHandPositions(hourHand, minuteHand);
   setInterval(() => {
     updateHandPositions(hourHand, minuteHand);
   }, 1000);
 
-  return h(
-    "div",
-    h("h2", "The Classic 12 hour clock face"),
-    svg,
-    h("p", "Behold how it keeps track of time")
-  );
+  svg.appendChild(createClockFace());
+  createHourMarkers().forEach((marker) => svg.appendChild(marker));
+  svg.appendChild(hourHand);
+  svg.appendChild(minuteHand);
+
+  return h("section", h("h2", "The Classic 12 hour clock face"), svg);
 };
