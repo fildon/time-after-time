@@ -1,17 +1,21 @@
 {
   "name": "time-after-time",
   "scripts": {
-    "build:js": "esbuild src/index.tsx --bundle --minify --outdir=dist",
+    "build:js": "esbuild src/index.ts --bundle --minify --outdir=dist",
     "build:static": "shx cp -R ./static/* ./dist",
     "build": "npm run build:js && npm run build:static",
-    "serve": "serve dist"
+    "serve": "serve dist",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/hyperscript": "^0.0.4",
+    "@types/jest": "^27.4.1",
     "esbuild": "^0.14.34",
     "hyperscript": "^2.0.2",
     "serve": "^13.0.2",
     "shx": "^0.3.4",
+    "ts-jest": "^27.1.4",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   }
 }
