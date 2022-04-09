@@ -3,7 +3,7 @@ import h from "hyperscript";
 import { Circle, Line } from "./svgUtil";
 
 /**
- * Given a timestamp, returns the ratio of the hours in the day mod 12
+ * Given a timestamp, returns the ratio of the hours in the day
  */
 export const getHourHandRatio = (time: {
   getSeconds: () => number;
@@ -17,8 +17,8 @@ export const getHourHandRatio = (time: {
   // Seconds since the start of the day
   const secondsToday = 60 * 60 * hours + 60 * minutes + seconds;
 
-  // We divide by the total seconds in 12 hours and mod by 1 to wrap at noon
-  return (secondsToday / (12 * 60 * 60)) % 1;
+  // We divide by the total seconds in 24 hours
+  return secondsToday / (24 * 60 * 60);
 };
 
 /**
@@ -55,8 +55,8 @@ export const getHandPositions = (time: {
 };
 
 const createHourMarkers = () =>
-  new Array(12).fill(null).map((_, i) => {
-    const ratio = i / 12;
+  new Array(24).fill(null).map((_, i) => {
+    const ratio = i / 24;
     const x = Math.sin(ratio * Math.PI * 2);
     const y = -Math.cos(ratio * Math.PI * 2);
     return Line({
@@ -87,7 +87,7 @@ const updateHandPositions = (
 /**
  * Constructs Div element containing an animated 12 hour clock face
  */
-export const Classic12 = () => {
+export const Classic24 = () => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "-100 -100 200 200");
 
@@ -104,5 +104,10 @@ export const Classic12 = () => {
   svg.appendChild(hourHand);
   svg.appendChild(minuteHand);
 
-  return h("section", h("h2", "12 hour clock face"), svg);
+  return h(
+    "section",
+    h("h2", "24 hour clock face"),
+    h("p", "Each radial marker indicates one hour or 2.5 minutes"),
+    svg
+  );
 };
