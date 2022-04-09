@@ -8,6 +8,8 @@ const mainElement = document.getElementsByTagName("main")[0];
 );
 
 // TODO
+// - 10 hour clock. For some fucking reason. It's got to jump the hand now and then.
+// - 6 hour clock. Rotates 4 times in a day.
 // - pendulum clock
 // - reverse clock
 // - rotating face, static hands

@@ -1,6 +1,6 @@
 import h from "hyperscript";
 
-import { Circle, Line } from "./svgUtil";
+import { Circle, Line, SVGBuilder } from "./svgUtil";
 import { ratioToXY } from "./trigUtil";
 
 /**
@@ -101,9 +101,6 @@ const updateHandPositions = (
  * Constructs element containing an animated 24 hour clock face
  */
 export const Classic24 = () => {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-  svg.setAttribute("viewBox", "-100 -100 200 200");
-
   const hourHand = Line({ color: "blue" });
   const minuteHand = Line();
   const secondHand = Line({ strokeWidth: 3 });
@@ -113,11 +110,13 @@ export const Classic24 = () => {
     updateHandPositions(hourHand, minuteHand, secondHand);
   }, 10);
 
-  createHourMarkers().forEach((marker) => svg.appendChild(marker));
-  svg.appendChild(Circle());
-  svg.appendChild(hourHand);
-  svg.appendChild(minuteHand);
-  svg.appendChild(secondHand);
+  const svg = SVGBuilder()
+    .withMany(createHourMarkers())
+    .with(Circle())
+    .with(hourHand)
+    .with(minuteHand)
+    .with(secondHand)
+    .build();
 
   return h(
     "article",

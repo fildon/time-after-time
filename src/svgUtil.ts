@@ -1,3 +1,17 @@
+export const SVGBuilder = (children: Array<SVGElement> = []) => {
+  return {
+    withMany: (newChildren: Array<SVGElement>) =>
+      SVGBuilder([...children, ...newChildren]),
+    with: (newChild: SVGElement) => SVGBuilder([...children, newChild]),
+    build: () => {
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "-100 -100 200 200");
+      children.forEach((child) => svg.appendChild(child));
+      return svg;
+    },
+  };
+};
+
 export const Line = ({
   color = "black",
   strokeWidth = 5,
