@@ -29,11 +29,17 @@ export const getMinuteHandRatio = (time: {
   getMinutes: () => number;
 }) => (60 * time.getMinutes() + time.getSeconds()) / (60 * 60);
 
+const getSecondHandRatio = (time: {
+  getSeconds: () => number;
+  getMilliseconds: () => number;
+}) => (1000 * time.getSeconds() + time.getMilliseconds()) / (60 * 1000);
+
 /**
  * Given a timestamp returns the x and y coordinates of the
  * hour and minute hands, assuming they have a length of 1
  */
 export const getHandPositions = (time: {
+  getMilliseconds: () => number;
   getSeconds: () => number;
   getMinutes: () => number;
   getHours: () => number;
@@ -46,11 +52,17 @@ export const getHandPositions = (time: {
   const minuteX = Math.sin(minuteRatio * Math.PI * 2);
   const minuteY = -Math.cos(minuteRatio * Math.PI * 2);
 
+  const secondRatio = getSecondHandRatio(time);
+  const secondX = Math.sin(secondRatio * Math.PI * 2);
+  const secondY = -Math.cos(secondRatio * Math.PI * 2);
+
   return {
     hourX,
     hourY,
     minuteX,
     minuteY,
+    secondX,
+    secondY,
   };
 };
 
@@ -74,14 +86,19 @@ const createHourMarkers = () =>
  */
 const updateHandPositions = (
   hourHand: SVGLineElement,
-  minuteHand: SVGLineElement
+  minuteHand: SVGLineElement,
+  secondHand: SVGLineElement
 ) => {
-  const { hourX, hourY, minuteX, minuteY } = getHandPositions(new Date());
+  const { hourX, hourY, minuteX, minuteY, secondX, secondY } = getHandPositions(
+    new Date()
+  );
 
   hourHand.setAttribute("x2", (60 * hourX).toString());
   hourHand.setAttribute("y2", (60 * hourY).toString());
   minuteHand.setAttribute("x2", (80 * minuteX).toString());
   minuteHand.setAttribute("y2", (80 * minuteY).toString());
+  secondHand.setAttribute("x2", (80 * secondX).toString());
+  secondHand.setAttribute("y2", (80 * secondY).toString());
 };
 
 /**
@@ -93,16 +110,18 @@ export const Classic24 = () => {
 
   const hourHand = Line();
   const minuteHand = Line();
+  const secondHand = Line({ strokeWidth: 3 });
 
-  updateHandPositions(hourHand, minuteHand);
+  updateHandPositions(hourHand, minuteHand, secondHand);
   setInterval(() => {
-    updateHandPositions(hourHand, minuteHand);
-  }, 1000);
+    updateHandPositions(hourHand, minuteHand, secondHand);
+  }, 10);
 
   svg.appendChild(Circle());
   createHourMarkers().forEach((marker) => svg.appendChild(marker));
   svg.appendChild(hourHand);
   svg.appendChild(minuteHand);
+  svg.appendChild(secondHand);
 
   return h(
     "section",

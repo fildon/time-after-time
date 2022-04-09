@@ -7,9 +7,11 @@ const rootElement = document.getElementById("root");
 rootElement?.appendChild(h("article", Classic12(), Classic24()));
 
 // TODO
+// - hours in a week?
 // - pendulum clock
 // - reverse clock
 // - rotating face, static hands
 // - clock like a calendar
 // - LCD digital clock
 // - Loading bar
+// - A spiral expanding and intersecting with a static circle?
