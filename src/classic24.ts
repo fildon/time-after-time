@@ -104,7 +104,7 @@ export const Classic24 = () => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "-100 -100 200 200");
 
-  const hourHand = Line();
+  const hourHand = Line({ color: "blue" });
   const minuteHand = Line();
   const secondHand = Line({ strokeWidth: 3 });
 
@@ -120,11 +120,11 @@ export const Classic24 = () => {
   svg.appendChild(secondHand);
 
   return h(
-    "section",
+    "article",
     h("h2", "24 hour clock face"),
     h(
       "p",
-      "The usual 12 radial markers are displayed in large. An additional 12 smaller grey markers are interleaved providing 24 markers, one for each hour of the day."
+      "The usual 12 radial markers are displayed in large. An additional 12 smaller grey markers are interleaved providing 24 markers, one for each hour of the day. The hour hand (displayed in blue) moves only a half as fast as on a conventional 12 hour clock face. It completes one rotation only once per full day."
     ),
     svg
   );

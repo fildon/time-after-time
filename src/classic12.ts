@@ -117,5 +117,5 @@ export const Classic12 = () => {
   svg.appendChild(minuteHand);
   svg.appendChild(secondHand);
 
-  return h("section", h("h2", "12 hour clock face"), svg);
+  return h("article", h("h2", "12 hour clock face"), svg);
 };

@@ -30,8 +30,8 @@ export const getHourRatio = (time: {
   // Seconds since the start of the day
   const secondsToday = 60 * 60 * hours + 60 * minutes + seconds;
 
-  // We divide by the total seconds in 24 hours
-  return secondsToday / (24 * 60 * 60);
+  // We divide by the total seconds in 12 hours and mod by 1 to wrap at noon
+  return (secondsToday / (12 * 60 * 60)) % 1;
 };
 
 /**
@@ -138,7 +138,7 @@ export const Day7 = () => {
   svg.appendChild(secondHand);
 
   return h(
-    "section",
+    "article",
     h("h2", "7 day clock face"),
     h(
       "p",
