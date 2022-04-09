@@ -1,4 +1,4 @@
-import { get12HourRatio, getMinuteRatio } from "./time";
+import { get12HourRatio, getHourRatio } from "./time";
 
 describe("Time Utils", () => {
   describe("get12HourRatio", () => {
@@ -22,7 +22,7 @@ describe("Time Utils", () => {
     });
   });
 
-  describe("getMinuteRatio", () => {
+  describe("getHourRatio", () => {
     it.each([
       { minutes: 0, expected: 0 },
       { minutes: 15, expected: 0.25 },
@@ -30,7 +30,7 @@ describe("Time Utils", () => {
       { minutes: 45, expected: 0.75 },
       { minutes: 60, expected: 0 },
     ])("is $expected at 00:$minutes", ({ minutes, expected }) => {
-      const ratio = getMinuteRatio({
+      const ratio = getHourRatio({
         getSeconds: () => 0,
         getMinutes: () => minutes,
       });

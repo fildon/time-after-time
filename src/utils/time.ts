@@ -25,7 +25,7 @@ const createTimeRatioGetter =
     return (totalSeconds % modSeconds) / modSeconds;
   };
 
-export const getDayRatio = createTimeRatioGetter(7 * 24 * 60 * 60);
+export const getWeekRatio = createTimeRatioGetter(7 * 24 * 60 * 60);
 
 /**
  * Given a timestamp, returns the ratio of the hours in the day
@@ -40,8 +40,6 @@ export const get12HourRatio = createTimeRatioGetter(12 * 60 * 60);
 /**
  * Given a timestamp, returns the ratio of the minutes relative to the hour
  */
-export const getMinuteRatio = createTimeRatioGetter(60 * 60);
+export const getHourRatio = createTimeRatioGetter(60 * 60);
 
-export const getSecondRatio = createTimeRatioGetter(60);
-
-export const getMillisRatio = createTimeRatioGetter(1);
+export const getMinuteRatio = createTimeRatioGetter(60);

@@ -1,12 +1,7 @@
 import h from "hyperscript";
 
 import { Circle, Line, SVGBuilder } from "./utils/svg";
-import {
-  get12HourRatio,
-  getMillisRatio,
-  getMinuteRatio,
-  getSecondRatio,
-} from "./utils/time";
+import { get12HourRatio, getHourRatio, getMinuteRatio } from "./utils/time";
 
 const createHourMarkers = () =>
   new Array(12).fill(null).map((_, i) => {
@@ -41,7 +36,7 @@ const createMinuteMarkers = () =>
       color: i === 0 ? "red" : "black",
       rotationOpts: {
         duration: "1h",
-        startOffset: getMinuteRatio(new Date()),
+        startOffset: getHourRatio(new Date()),
       },
     });
   });
@@ -61,26 +56,7 @@ const createSecondMarkers = () =>
       color: i === 0 ? "red" : "black",
       rotationOpts: {
         duration: "60s",
-        startOffset: getSecondRatio(new Date()),
-      },
-    });
-  });
-
-const createMillisecondMarkers = () =>
-  new Array(1).fill(null).map((_, i) => {
-    const ratio = i / 1;
-    const x = Math.sin(ratio * Math.PI * 2);
-    const y = -Math.cos(ratio * Math.PI * 2);
-    return Line({
-      x1: 35 * x,
-      y1: 35 * y,
-      x2: 30 * x,
-      y2: 30 * y,
-      strokeWidth: 5,
-      color: i === 0 ? "red" : "black",
-      rotationOpts: {
-        duration: "1s",
-        startOffset: getMillisRatio(new Date()),
+        startOffset: getMinuteRatio(new Date()),
       },
     });
   });
@@ -89,22 +65,18 @@ export const ConcentricRings = () => {
   const hourCircle = Circle();
   const minuteCircle = Circle({ r: 75 });
   const secondCircle = Circle({ r: 55 });
-  const millisecondCircle = Circle({ r: 35 });
 
   const hourMarkers = createHourMarkers();
   const minuteMarkers = createMinuteMarkers();
   const secondMarkers = createSecondMarkers();
-  const millisecondMarkers = createMillisecondMarkers();
 
   const svg = SVGBuilder()
     .with(...hourMarkers)
     .with(...minuteMarkers)
     .with(...secondMarkers)
-    .with(...millisecondMarkers)
     .with(hourCircle)
     .with(minuteCircle)
     .with(secondCircle)
-    .with(millisecondCircle)
     .build();
 
   return h(
@@ -112,7 +84,7 @@ export const ConcentricRings = () => {
     h("h2", "Concentric Rings"),
     h(
       "p",
-      "Concentric rings rotate around a common centre. The outer most ring rotates once every 12 hours. The second ring once every hour. The third ring once every minute. The innermost ring once every second. Red markers correspond to the zero on each dial."
+      "Concentric rings rotate around a common centre. The outer most ring rotates once every 12 hours. The middle ring once every hour. The innermost ring once every minute. Red markers correspond to the zero on each ring."
     ),
     svg
   );

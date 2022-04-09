@@ -2,10 +2,10 @@ import h from "hyperscript";
 
 import { Circle, Line, SVGBuilder } from "./utils/svg";
 import {
-  getDayRatio,
+  getWeekRatio,
   get12HourRatio,
+  getHourRatio,
   getMinuteRatio,
-  getSecondRatio,
 } from "./utils/time";
 
 const createDayMarkers = () =>
@@ -32,7 +32,7 @@ export const Day7 = () => {
     y2: -60,
     color: "green",
     rotationOpts: {
-      startOffset: getDayRatio(now),
+      startOffset: getWeekRatio(now),
       duration: "168h", // There are 168 hours in a week
     },
   });
@@ -48,7 +48,7 @@ export const Day7 = () => {
   const minuteHand = Line({
     y2: -80,
     rotationOpts: {
-      startOffset: getMinuteRatio(now),
+      startOffset: getHourRatio(now),
       duration: "60min",
     },
   });
@@ -57,7 +57,7 @@ export const Day7 = () => {
     strokeWidth: 3,
     y2: -80,
     rotationOpts: {
-      startOffset: getSecondRatio(now),
+      startOffset: getMinuteRatio(now),
       duration: "60s",
     },
   });

@@ -1,7 +1,7 @@
 import h from "hyperscript";
 
 import { Circle, Line, SVGBuilder } from "./utils/svg";
-import { get12HourRatio, getMinuteRatio, getSecondRatio } from "./utils/time";
+import { get12HourRatio, getHourRatio, getMinuteRatio } from "./utils/time";
 
 const createHourMarkers = () =>
   new Array(12).fill(null).map((_, i) => {
@@ -29,14 +29,14 @@ export const Classic12 = () => {
 
   const minuteHand = Line({
     y2: -80,
-    rotationOpts: { startOffset: getMinuteRatio(now), duration: "60min" },
+    rotationOpts: { startOffset: getHourRatio(now), duration: "60min" },
   });
 
   const secondHand = Line({
     strokeWidth: 3,
     y2: -80,
     rotationOpts: {
-      startOffset: getSecondRatio(now),
+      startOffset: getMinuteRatio(now),
       duration: "60s",
     },
   });
