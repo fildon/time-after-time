@@ -3,8 +3,20 @@ import h from "hyperscript";
 import { Circle, Line } from "./svgUtil";
 import { ratioToXY } from "./trigUtil";
 
+const getDayRatio = (time: {
+  getDay: () => number;
+  getHours: () => number;
+  getMinutes: () => number;
+}) => {
+  const days = time.getDay();
+  const hours = time.getHours();
+  const minutes = time.getMinutes();
+
+  return (24 * 60 * days + 60 * hours + minutes) / (7 * 24 * 60);
+};
+
 /**
- * Given a timestamp, returns the ratio of the hours in the day mod 12
+ * Given a timestamp, returns the ratio of the hours in the day
  */
 export const getHourRatio = (time: {
   getSeconds: () => number;
@@ -18,8 +30,8 @@ export const getHourRatio = (time: {
   // Seconds since the start of the day
   const secondsToday = 60 * 60 * hours + 60 * minutes + seconds;
 
-  // We divide by the total seconds in 12 hours and mod by 1 to wrap at noon
-  return (secondsToday / (12 * 60 * 60)) % 1;
+  // We divide by the total seconds in 24 hours
+  return secondsToday / (24 * 60 * 60);
 };
 
 /**
@@ -46,11 +58,14 @@ export const getHandPositions = (time: {
   getHours: () => number;
   getDay: () => number;
 }) => {
+  const { x: dayX, y: dayY } = ratioToXY(getDayRatio(time));
   const { x: hourX, y: hourY } = ratioToXY(getHourRatio(time));
   const { x: minuteX, y: minuteY } = ratioToXY(getMinuteRatio(time));
   const { x: secondX, y: secondY } = ratioToXY(getSecondRatio(time));
 
   return {
+    dayX,
+    dayY,
     hourX,
     hourY,
     minuteX,
@@ -60,9 +75,9 @@ export const getHandPositions = (time: {
   };
 };
 
-const createHourMarkers = () =>
-  new Array(12).fill(null).map((_, i) => {
-    const ratio = i / 12;
+const createDayMarkers = () =>
+  new Array(7).fill(null).map((_, i) => {
+    const ratio = i / 7;
     const x = Math.sin(ratio * Math.PI * 2);
     const y = -Math.cos(ratio * Math.PI * 2);
     return Line({
@@ -70,6 +85,7 @@ const createHourMarkers = () =>
       x2: 90 * x,
       y1: 95 * y,
       y2: 90 * y,
+      color: "green",
     });
   });
 
@@ -79,14 +95,16 @@ const createHourMarkers = () =>
  * WARNING operates by side effect
  */
 const updateHandPositions = (
+  dayHand: SVGLineElement,
   hourHand: SVGLineElement,
   minuteHand: SVGLineElement,
   secondHand: SVGLineElement
 ) => {
-  const { hourX, hourY, minuteX, minuteY, secondX, secondY } = getHandPositions(
-    new Date()
-  );
+  const { dayX, dayY, hourX, hourY, minuteX, minuteY, secondX, secondY } =
+    getHandPositions(new Date());
 
+  dayHand.setAttribute("x2", (60 * dayX).toString());
+  dayHand.setAttribute("y2", (60 * dayY).toString());
   hourHand.setAttribute("x2", (60 * hourX).toString());
   hourHand.setAttribute("y2", (60 * hourY).toString());
   minuteHand.setAttribute("x2", (80 * minuteX).toString());
@@ -96,26 +114,36 @@ const updateHandPositions = (
 };
 
 /**
- * Constructs element containing an animated 12 hour clock face
+ * Constructs element containing an animated 7 day clock face
  */
-export const Classic12 = () => {
+export const Day7 = () => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", "-100 -100 200 200");
 
+  const dayHand = Line({ color: "green" });
   const hourHand = Line();
   const minuteHand = Line();
   const secondHand = Line({ strokeWidth: 3 });
 
-  updateHandPositions(hourHand, minuteHand, secondHand);
+  updateHandPositions(dayHand, hourHand, minuteHand, secondHand);
   setInterval(() => {
-    updateHandPositions(hourHand, minuteHand, secondHand);
+    updateHandPositions(dayHand, hourHand, minuteHand, secondHand);
   }, 10);
 
+  createDayMarkers().forEach((marker) => svg.appendChild(marker));
   svg.appendChild(Circle());
-  createHourMarkers().forEach((marker) => svg.appendChild(marker));
+  svg.appendChild(dayHand);
   svg.appendChild(hourHand);
   svg.appendChild(minuteHand);
   svg.appendChild(secondHand);
 
-  return h("section", h("h2", "12 hour clock face"), svg);
+  return h(
+    "section",
+    h("h2", "7 day clock face"),
+    h(
+      "p",
+      "There are 7 days in a week. The day hand (displayed in green) treats the midnight between Saturday and Sunday as the start of the week, and completes a full rotation exactly once per week. Each radial marker represents one day."
+    ),
+    svg
+  );
 };

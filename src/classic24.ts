@@ -1,11 +1,12 @@
 import h from "hyperscript";
 
 import { Circle, Line } from "./svgUtil";
+import { ratioToXY } from "./trigUtil";
 
 /**
  * Given a timestamp, returns the ratio of the hours in the day
  */
-export const getHourHandRatio = (time: {
+export const getHourRatio = (time: {
   getSeconds: () => number;
   getMinutes: () => number;
   getHours: () => number;
@@ -24,37 +25,30 @@ export const getHourHandRatio = (time: {
 /**
  * Given a timestamp, returns the ratio of the minutes relative to the hour
  */
-export const getMinuteHandRatio = (time: {
+export const getMinuteRatio = (time: {
   getSeconds: () => number;
   getMinutes: () => number;
 }) => (60 * time.getMinutes() + time.getSeconds()) / (60 * 60);
 
-const getSecondHandRatio = (time: {
+const getSecondRatio = (time: {
   getSeconds: () => number;
   getMilliseconds: () => number;
 }) => (1000 * time.getSeconds() + time.getMilliseconds()) / (60 * 1000);
 
 /**
  * Given a timestamp returns the x and y coordinates of the
- * hour and minute hands, assuming they have a length of 1
+ * clock hands, assuming they have a length of 1
  */
 export const getHandPositions = (time: {
   getMilliseconds: () => number;
   getSeconds: () => number;
   getMinutes: () => number;
   getHours: () => number;
+  getDay: () => number;
 }) => {
-  const hourRatio = getHourHandRatio(time);
-  const hourX = Math.sin(hourRatio * Math.PI * 2);
-  const hourY = -Math.cos(hourRatio * Math.PI * 2);
-
-  const minuteRatio = getMinuteHandRatio(time);
-  const minuteX = Math.sin(minuteRatio * Math.PI * 2);
-  const minuteY = -Math.cos(minuteRatio * Math.PI * 2);
-
-  const secondRatio = getSecondHandRatio(time);
-  const secondX = Math.sin(secondRatio * Math.PI * 2);
-  const secondY = -Math.cos(secondRatio * Math.PI * 2);
+  const { x: hourX, y: hourY } = ratioToXY(getHourRatio(time));
+  const { x: minuteX, y: minuteY } = ratioToXY(getMinuteRatio(time));
+  const { x: secondX, y: secondY } = ratioToXY(getSecondRatio(time));
 
   return {
     hourX,
@@ -71,16 +65,18 @@ const createHourMarkers = () =>
     const ratio = i / 24;
     const x = Math.sin(ratio * Math.PI * 2);
     const y = -Math.cos(ratio * Math.PI * 2);
+    const length = i % 2 === 0 ? 10 : 5;
     return Line({
       x1: 95 * x,
-      x2: 90 * x,
+      x2: (95 - length) * x,
       y1: 95 * y,
-      y2: 90 * y,
+      y2: (95 - length) * y,
+      color: i % 2 === 0 ? "black" : "grey",
     });
   });
 
 /**
- * Updates hour and minute hands according to the time now
+ * Updates hands according to the time now
  *
  * WARNING operates by side effect
  */
@@ -102,7 +98,7 @@ const updateHandPositions = (
 };
 
 /**
- * Constructs Div element containing an animated 12 hour clock face
+ * Constructs element containing an animated 24 hour clock face
  */
 export const Classic24 = () => {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -117,8 +113,8 @@ export const Classic24 = () => {
     updateHandPositions(hourHand, minuteHand, secondHand);
   }, 10);
 
-  svg.appendChild(Circle());
   createHourMarkers().forEach((marker) => svg.appendChild(marker));
+  svg.appendChild(Circle());
   svg.appendChild(hourHand);
   svg.appendChild(minuteHand);
   svg.appendChild(secondHand);
@@ -126,7 +122,10 @@ export const Classic24 = () => {
   return h(
     "section",
     h("h2", "24 hour clock face"),
-    h("p", "Each radial marker indicates one hour or 2.5 minutes"),
+    h(
+      "p",
+      "The usual 12 radial markers are displayed in large. An additional 12 smaller grey markers are interleaved providing 24 markers, one for each hour of the day."
+    ),
     svg
   );
 };

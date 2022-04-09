@@ -1,4 +1,4 @@
-import { getHourHandRatio, getMinuteHandRatio } from "./classic12";
+import { getHourRatio, getMinuteRatio } from "./classic12";
 
 describe("Classic12", () => {
   describe("getHourHandRatio", () => {
@@ -13,7 +13,7 @@ describe("Classic12", () => {
       { hours: 21, expected: 0.75 },
       { hours: 24, expected: 0 },
     ])("is $expected at $hours:00", ({ hours, expected }) => {
-      const ratio = getHourHandRatio({
+      const ratio = getHourRatio({
         getSeconds: () => 0,
         getMinutes: () => 0,
         getHours: () => hours,
@@ -30,7 +30,7 @@ describe("Classic12", () => {
       { minutes: 45, expected: 0.75 },
       { minutes: 60, expected: 1 },
     ])("is $expected at 00:$minutes", ({ minutes, expected }) => {
-      const ratio = getMinuteHandRatio({
+      const ratio = getMinuteRatio({
         getSeconds: () => 0,
         getMinutes: () => minutes,
       });

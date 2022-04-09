@@ -1,15 +1,17 @@
 export const Line = ({
+  color = "black",
+  strokeWidth = 5,
   x1 = 0,
   x2 = 0,
   y1 = 0,
   y2 = 0,
-  strokeWidth = 5,
 }: {
+  color?: string;
+  strokeWidth?: number;
   x1?: number;
   x2?: number;
   y1?: number;
   y2?: number;
-  strokeWidth?: number;
 } = {}) => {
   const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
   Object.entries({
@@ -17,7 +19,7 @@ export const Line = ({
     x2: x2.toString(),
     y1: y1.toString(),
     y2: y2.toString(),
-    stroke: "black",
+    stroke: color,
     "stroke-width": strokeWidth.toString(),
     "stroke-linecap": "round",
   }).forEach(([k, v]) => line.setAttribute(k, v));
