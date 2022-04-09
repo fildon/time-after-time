@@ -1,7 +1,7 @@
 {
   "name": "time-after-time",
   "scripts": {
-    "build:js": "esbuild src/index.ts --bundle --minify --outdir=dist",
+    "build:js": "esbuild src/index.ts --bundle --minify --sourcemap --outdir=dist",
     "build:static": "shx cp -R ./static/* ./dist",
     "build": "npm run build:js && npm run build:static",
     "serve": "serve dist",

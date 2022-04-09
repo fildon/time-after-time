@@ -1,14 +1,23 @@
+import h from "hyperscript";
+
 import { Classic12 } from "./classic12";
 import { Classic24 } from "./classic24";
 import { Day7 } from "./day7";
+import { ConcentricRings } from "./concentricRings";
 
 const mainElement = document.getElementsByTagName("main")[0];
-[Classic12, Classic24, Day7].forEach((clock) =>
+mainElement.appendChild(h("h1", "Time after Time"));
+mainElement.appendChild(
+  h("p", "An exploration of alternative visualizations of time")
+);
+
+[Classic12, Classic24, Day7, ConcentricRings].forEach((clock) =>
   mainElement.appendChild(clock())
 );
 
 // TODO
 // - 10 hour clock. For some fucking reason. It's got to jump the hand now and then.
+// - Metric clock. Metric divisions of a day, into sufficiently small increments to see move.
 // - 6 hour clock. Rotates 4 times in a day.
 // - pendulum clock
 // - reverse clock
@@ -19,3 +28,5 @@ const mainElement = document.getElementsByTagName("main")[0];
 // - A spiral expanding and intersecting with a static circle?
 // - Clock face with sunrise and sunset times statically marked on the face itself
 //   - This would require GPS I think, since we need both time and latitude
+// - A pair of circles roll about each others circumferences
+// - Sine waves

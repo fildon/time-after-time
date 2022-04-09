@@ -1,79 +1,12 @@
 import h from "hyperscript";
 
-import { Circle, Line, SVGBuilder } from "./svgUtil";
-import { ratioToXY } from "./trigUtil";
-
-const getDayRatio = (time: {
-  getDay: () => number;
-  getHours: () => number;
-  getMinutes: () => number;
-}) => {
-  const days = time.getDay();
-  const hours = time.getHours();
-  const minutes = time.getMinutes();
-
-  return (24 * 60 * days + 60 * hours + minutes) / (7 * 24 * 60);
-};
-
-/**
- * Given a timestamp, returns the ratio of the hours in the day
- */
-export const getHourRatio = (time: {
-  getSeconds: () => number;
-  getMinutes: () => number;
-  getHours: () => number;
-}) => {
-  const seconds = time.getSeconds(); // 0 to 59
-  const minutes = time.getMinutes(); // 0 to 59
-  const hours = time.getHours(); // 0 to 23
-
-  // Seconds since the start of the day
-  const secondsToday = 60 * 60 * hours + 60 * minutes + seconds;
-
-  // We divide by the total seconds in 12 hours and mod by 1 to wrap at noon
-  return (secondsToday / (12 * 60 * 60)) % 1;
-};
-
-/**
- * Given a timestamp, returns the ratio of the minutes relative to the hour
- */
-export const getMinuteRatio = (time: {
-  getSeconds: () => number;
-  getMinutes: () => number;
-}) => (60 * time.getMinutes() + time.getSeconds()) / (60 * 60);
-
-const getSecondRatio = (time: {
-  getSeconds: () => number;
-  getMilliseconds: () => number;
-}) => (1000 * time.getSeconds() + time.getMilliseconds()) / (60 * 1000);
-
-/**
- * Given a timestamp returns the x and y coordinates of the
- * clock hands, assuming they have a length of 1
- */
-export const getHandPositions = (time: {
-  getMilliseconds: () => number;
-  getSeconds: () => number;
-  getMinutes: () => number;
-  getHours: () => number;
-  getDay: () => number;
-}) => {
-  const { x: dayX, y: dayY } = ratioToXY(getDayRatio(time));
-  const { x: hourX, y: hourY } = ratioToXY(getHourRatio(time));
-  const { x: minuteX, y: minuteY } = ratioToXY(getMinuteRatio(time));
-  const { x: secondX, y: secondY } = ratioToXY(getSecondRatio(time));
-
-  return {
-    dayX,
-    dayY,
-    hourX,
-    hourY,
-    minuteX,
-    minuteY,
-    secondX,
-    secondY,
-  };
-};
+import { Circle, Line, SVGBuilder } from "./utils/svg";
+import {
+  getDayRatio,
+  get12HourRatio,
+  getMinuteRatio,
+  getSecondRatio,
+} from "./utils/time";
 
 const createDayMarkers = () =>
   new Array(7).fill(null).map((_, i) => {
@@ -90,45 +23,47 @@ const createDayMarkers = () =>
   });
 
 /**
- * Updates hands according to the time now
- *
- * WARNING operates by side effect
- */
-const updateHandPositions = (
-  dayHand: SVGLineElement,
-  hourHand: SVGLineElement,
-  minuteHand: SVGLineElement,
-  secondHand: SVGLineElement
-) => {
-  const { dayX, dayY, hourX, hourY, minuteX, minuteY, secondX, secondY } =
-    getHandPositions(new Date());
-
-  dayHand.setAttribute("x2", (60 * dayX).toString());
-  dayHand.setAttribute("y2", (60 * dayY).toString());
-  hourHand.setAttribute("x2", (60 * hourX).toString());
-  hourHand.setAttribute("y2", (60 * hourY).toString());
-  minuteHand.setAttribute("x2", (80 * minuteX).toString());
-  minuteHand.setAttribute("y2", (80 * minuteY).toString());
-  secondHand.setAttribute("x2", (80 * secondX).toString());
-  secondHand.setAttribute("y2", (80 * secondY).toString());
-};
-
-/**
  * Constructs element containing an animated 7 day clock face
  */
 export const Day7 = () => {
-  const dayHand = Line({ color: "green" });
-  const hourHand = Line();
-  const minuteHand = Line();
-  const secondHand = Line({ strokeWidth: 3 });
+  const now = new Date();
 
-  updateHandPositions(dayHand, hourHand, minuteHand, secondHand);
-  setInterval(() => {
-    updateHandPositions(dayHand, hourHand, minuteHand, secondHand);
-  }, 10);
+  const dayHand = Line({
+    y2: -60,
+    color: "green",
+    rotationOpts: {
+      startOffset: getDayRatio(now),
+      duration: "168h", // There are 168 hours in a week
+    },
+  });
+
+  const hourHand = Line({
+    y2: -60,
+    rotationOpts: {
+      startOffset: get12HourRatio(now),
+      duration: "12h",
+    },
+  });
+
+  const minuteHand = Line({
+    y2: -80,
+    rotationOpts: {
+      startOffset: getMinuteRatio(now),
+      duration: "60min",
+    },
+  });
+
+  const secondHand = Line({
+    strokeWidth: 3,
+    y2: -80,
+    rotationOpts: {
+      startOffset: getSecondRatio(now),
+      duration: "60s",
+    },
+  });
 
   const svg = SVGBuilder()
-    .withMany(createDayMarkers())
+    .with(...createDayMarkers())
     .with(Circle())
     .with(dayHand)
     .with(hourHand)
