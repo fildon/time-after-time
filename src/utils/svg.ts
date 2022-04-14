@@ -98,3 +98,40 @@ const RotationAnimation = ({ startOffset, duration }: RotationOpts) => {
 
   return animation;
 };
+
+export const Rectangle = ({
+  color = "black",
+  yOffset = 10,
+  width = 100,
+  fill = "transparent",
+}: {
+  color?: string;
+  yOffset?: number;
+  width?: number;
+  fill?: "transparent" | "green";
+} = {}) => {
+  const rectangle = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "rect"
+  );
+
+  Object.entries({
+    "stroke-width": "5",
+    fill,
+    height: "50",
+    stroke: color,
+    width: width.toString(),
+    x: "-90",
+    y: yOffset.toString(),
+  }).forEach(([k, v]) => rectangle.setAttribute(k, v));
+
+  return rectangle;
+};
+
+export const Group = (...children: Array<SVGElement>) => {
+  const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+  children.forEach((child) => group.appendChild(child));
+
+  return group;
+};
