@@ -1,6 +1,6 @@
 import h from "hyperscript";
 
-import { Circle, Line, SVGBuilder } from "./utils/svg";
+import { Circle, Line, SVG } from "./utils/svg";
 import { get24HourRatio, getHourRatio, getMinuteRatio } from "./utils/time";
 
 const createHourMarkers = () =>
@@ -50,13 +50,13 @@ export const Classic24 = () => {
     },
   });
 
-  const svg = SVGBuilder()
-    .with(...createHourMarkers())
-    .with(Circle())
-    .with(hourHand)
-    .with(minuteHand)
-    .with(secondHand)
-    .build();
+  const svg = SVG(
+    ...createHourMarkers(),
+    Circle(),
+    hourHand,
+    minuteHand,
+    secondHand
+  );
 
   return h(
     "article",

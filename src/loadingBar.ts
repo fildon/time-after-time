@@ -1,5 +1,5 @@
 import h from "hyperscript";
-import { Group, Line, Rectangle, SVGBuilder } from "./utils/svg";
+import { Group, Line, Rectangle, SVG } from "./utils/svg";
 import { createTimeRatioGetter } from "./utils/time";
 
 /**
@@ -72,11 +72,7 @@ export const LoadingBar = () => {
   const minuteBar = createLoadingBar(60 * 60, -25, "minute", 12);
   const secondBar = createLoadingBar(60, 45, "second", 12);
 
-  const svg = SVGBuilder()
-    .with(hourBar)
-    .with(minuteBar)
-    .with(secondBar)
-    .build();
+  const svg = SVG(hourBar, minuteBar, secondBar);
 
   return h(
     "article",

@@ -1,6 +1,6 @@
 import h from "hyperscript";
 
-import { Circle, Line, SVGBuilder } from "./utils/svg";
+import { Circle, Line, SVG } from "./utils/svg";
 import { get12HourRatio, getHourRatio, getMinuteRatio } from "./utils/time";
 
 const createHourMarkers = () =>
@@ -70,14 +70,14 @@ export const ConcentricRings = () => {
   const minuteMarkers = createMinuteMarkers();
   const secondMarkers = createSecondMarkers();
 
-  const svg = SVGBuilder()
-    .with(...hourMarkers)
-    .with(...minuteMarkers)
-    .with(...secondMarkers)
-    .with(hourCircle)
-    .with(minuteCircle)
-    .with(secondCircle)
-    .build();
+  const svg = SVG(
+    ...hourMarkers,
+    ...minuteMarkers,
+    ...secondMarkers,
+    hourCircle,
+    minuteCircle,
+    secondCircle
+  );
 
   return h(
     "article",

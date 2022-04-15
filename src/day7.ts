@@ -1,6 +1,6 @@
 import h from "hyperscript";
 
-import { Circle, Line, SVGBuilder } from "./utils/svg";
+import { Circle, Line, SVG } from "./utils/svg";
 import {
   getWeekRatio,
   get12HourRatio,
@@ -62,14 +62,14 @@ export const Day7 = () => {
     },
   });
 
-  const svg = SVGBuilder()
-    .with(...createDayMarkers())
-    .with(Circle())
-    .with(dayHand)
-    .with(hourHand)
-    .with(minuteHand)
-    .with(secondHand)
-    .build();
+  const svg = SVG(
+    ...createDayMarkers(),
+    Circle(),
+    dayHand,
+    hourHand,
+    minuteHand,
+    secondHand
+  );
 
   return h(
     "article",

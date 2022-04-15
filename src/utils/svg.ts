@@ -1,14 +1,8 @@
-export const SVGBuilder = (children: Array<SVGElement> = []) => {
-  return {
-    with: (...newChild: Array<SVGElement>) =>
-      SVGBuilder([...children, ...newChild]),
-    build: () => {
-      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svg.setAttribute("viewBox", "-100 -100 200 200");
-      children.forEach((child) => svg.appendChild(child));
-      return svg;
-    },
-  };
+export const SVG = (...children: Array<SVGElement>) => {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("viewBox", "-100 -100 200 200");
+  children.forEach((child) => svg.appendChild(child));
+  return svg;
 };
 
 export const Line = ({

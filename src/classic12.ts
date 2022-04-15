@@ -1,6 +1,6 @@
 import h from "hyperscript";
 
-import { Circle, Line, SVGBuilder } from "./utils/svg";
+import { Circle, Line, SVG } from "./utils/svg";
 import { get12HourRatio, getHourRatio, getMinuteRatio } from "./utils/time";
 
 const createHourMarkers = () =>
@@ -41,13 +41,13 @@ export const Classic12 = () => {
     },
   });
 
-  const svg = SVGBuilder()
-    .with(Circle())
-    .with(...createHourMarkers())
-    .with(hourHand)
-    .with(minuteHand)
-    .with(secondHand)
-    .build();
+  const svg = SVG(
+    Circle(),
+    ...createHourMarkers(),
+    hourHand,
+    minuteHand,
+    secondHand
+  );
 
   return h("article", h("h2", "12 hour clock face"), svg);
 };
