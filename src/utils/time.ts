@@ -1,19 +1,17 @@
 /**
  * A minimal subset of the builtin `Date` type
  */
-export type Time = Partial<
-  Pick<
-    Date,
-    "getDay" | "getHours" | "getMinutes" | "getSeconds" | "getMilliseconds"
-  >
+export type Time = Pick<
+  Date,
+  "getDay" | "getHours" | "getMinutes" | "getSeconds" | "getMilliseconds"
 >;
 
 export const createTimeRatioGetter = (modSeconds: number) => (time: Time) => {
-  const day = time.getDay?.() ?? 0;
-  const hours = time.getHours?.() ?? 0;
-  const minutes = time.getMinutes?.() ?? 0;
-  const seconds = time.getSeconds?.() ?? 0;
-  const millis = time.getMilliseconds?.() ?? 0;
+  const day = time.getDay();
+  const hours = time.getHours();
+  const minutes = time.getMinutes();
+  const seconds = time.getSeconds();
+  const millis = time.getMilliseconds();
 
   const totalSeconds =
     (24 * 60 * 60 * 1000 * day +

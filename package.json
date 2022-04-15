@@ -5,7 +5,8 @@
     "build:static": "shx cp -R ./static/* ./dist",
     "build": "npm run build:js && npm run build:static",
     "serve": "serve dist",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "devDependencies": {
     "@types/hyperscript": "^0.0.4",

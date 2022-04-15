@@ -5,6 +5,14 @@ export const SVG = (...children: Array<SVGElement>) => {
   return svg;
 };
 
+export const Group = (...children: Array<SVGElement>) => {
+  const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+
+  children.forEach((child) => group.appendChild(child));
+
+  return group;
+};
+
 export const Line = ({
   color = "black",
   strokeWidth = 5,
@@ -12,7 +20,7 @@ export const Line = ({
   x2 = 0,
   y1 = 0,
   y2 = 0,
-  rotationOpts,
+  children = [],
 }: {
   color?: string;
   strokeWidth?: number;
@@ -20,7 +28,7 @@ export const Line = ({
   x2?: number;
   y1?: number;
   y2?: number;
-  rotationOpts?: RotationOpts;
+  children?: Array<SVGElement>;
 } = {}) => {
   const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
   Object.entries({
@@ -32,11 +40,7 @@ export const Line = ({
     "stroke-width": strokeWidth.toString(),
     "stroke-linecap": "round",
   }).forEach(([k, v]) => line.setAttribute(k, v));
-
-  if (rotationOpts) {
-    line.appendChild(RotationAnimation(rotationOpts));
-  }
-
+  children.forEach((child) => line.appendChild(child));
   return line;
 };
 
@@ -59,38 +63,6 @@ export const Circle = ({
     "stroke-width": strokeWidth.toString(),
   }).forEach(([k, v]) => circle.setAttribute(k, v));
   return circle;
-};
-
-type RotationOpts = {
-  startOffset: number;
-  duration: `${number}${"h" | "min" | "s" | "ms"}`;
-};
-
-/**
- * Builds an SVG animateTransform specifically for rotation
- *
- * @param startOffset is between 0 and 1
- * @param dur is a duration string conforming to 'Clock-value'
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Content_type#clock-value
- */
-const RotationAnimation = ({ startOffset, duration }: RotationOpts) => {
-  const animation = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "animateTransform"
-  );
-
-  Object.entries({
-    attributeName: "transform",
-    attributeType: "XML",
-    type: "rotate",
-    from: `${360 * startOffset} 0 0`,
-    to: `${360 * startOffset + 360} 0 0`,
-    dur: duration,
-    repeatCount: "indefinite",
-  }).forEach(([k, v]) => animation.setAttribute(k, v));
-
-  return animation;
 };
 
 export const Rectangle = ({
@@ -122,10 +94,34 @@ export const Rectangle = ({
   return rectangle;
 };
 
-export const Group = (...children: Array<SVGElement>) => {
-  const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+type RotationOpts = {
+  startOffset: number;
+  duration: `${number}${"h" | "min" | "s" | "ms"}`;
+};
 
-  children.forEach((child) => group.appendChild(child));
+/**
+ * Builds an SVG animateTransform specifically for rotation
+ *
+ * @param startOffset is between 0 and 1
+ * @param duration is a duration string conforming to 'Clock-value'
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Content_type#clock-value
+ */
+export const RotationAnimation = ({ startOffset, duration }: RotationOpts) => {
+  const animation = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "animateTransform"
+  );
 
-  return group;
+  Object.entries({
+    attributeName: "transform",
+    attributeType: "XML",
+    type: "rotate",
+    from: `${360 * startOffset} 0 0`,
+    to: `${360 * startOffset + 360} 0 0`,
+    dur: duration,
+    repeatCount: "indefinite",
+  }).forEach(([k, v]) => animation.setAttribute(k, v));
+
+  return animation;
 };

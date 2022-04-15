@@ -1,6 +1,6 @@
 import h from "hyperscript";
 
-import { Circle, Line, SVG } from "./utils/svg";
+import { Circle, Line, RotationAnimation, SVG } from "./utils/svg";
 import {
   getWeekRatio,
   get12HourRatio,
@@ -31,35 +31,43 @@ export const Day7 = () => {
   const dayHand = Line({
     y2: -60,
     color: "green",
-    rotationOpts: {
-      startOffset: getWeekRatio(now),
-      duration: "168h", // There are 168 hours in a week
-    },
+    children: [
+      RotationAnimation({
+        startOffset: getWeekRatio(now),
+        duration: "168h", // There are 168 hours in a week
+      }),
+    ],
   });
 
   const hourHand = Line({
     y2: -60,
-    rotationOpts: {
-      startOffset: get12HourRatio(now),
-      duration: "12h",
-    },
+    children: [
+      RotationAnimation({
+        startOffset: get12HourRatio(now),
+        duration: "12h",
+      }),
+    ],
   });
 
   const minuteHand = Line({
     y2: -80,
-    rotationOpts: {
-      startOffset: getHourRatio(now),
-      duration: "60min",
-    },
+    children: [
+      RotationAnimation({
+        startOffset: getHourRatio(now),
+        duration: "60min",
+      }),
+    ],
   });
 
   const secondHand = Line({
     strokeWidth: 3,
     y2: -80,
-    rotationOpts: {
-      startOffset: getMinuteRatio(now),
-      duration: "60s",
-    },
+    children: [
+      RotationAnimation({
+        startOffset: getMinuteRatio(now),
+        duration: "60s",
+      }),
+    ],
   });
 
   const svg = SVG(

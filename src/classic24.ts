@@ -1,6 +1,6 @@
 import h from "hyperscript";
 
-import { Circle, Line, SVG } from "./utils/svg";
+import { Circle, Line, RotationAnimation, SVG } from "./utils/svg";
 import { get24HourRatio, getHourRatio, getMinuteRatio } from "./utils/time";
 
 const createHourMarkers = () =>
@@ -27,27 +27,33 @@ export const Classic24 = () => {
   const hourHand = Line({
     y2: -60,
     color: "blue",
-    rotationOpts: {
-      startOffset: get24HourRatio(now),
-      duration: "24h",
-    },
+    children: [
+      RotationAnimation({
+        startOffset: get24HourRatio(now),
+        duration: "24h",
+      }),
+    ],
   });
 
   const minuteHand = Line({
     y2: -80,
-    rotationOpts: {
-      startOffset: getHourRatio(now),
-      duration: "60min",
-    },
+    children: [
+      RotationAnimation({
+        startOffset: getHourRatio(now),
+        duration: "60min",
+      }),
+    ],
   });
 
   const secondHand = Line({
     strokeWidth: 3,
     y2: -80,
-    rotationOpts: {
-      startOffset: getMinuteRatio(now),
-      duration: "60s",
-    },
+    children: [
+      RotationAnimation({
+        startOffset: getMinuteRatio(now),
+        duration: "60s",
+      }),
+    ],
   });
 
   const svg = SVG(

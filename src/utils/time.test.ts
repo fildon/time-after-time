@@ -1,4 +1,4 @@
-import { get12HourRatio, getHourRatio } from "./time";
+import { createTimeRatioGetter, get12HourRatio, getHourRatio } from "./time";
 
 describe("Time Utils", () => {
   describe("get12HourRatio", () => {
@@ -14,9 +14,11 @@ describe("Time Utils", () => {
       { hours: 24, expected: 0 },
     ])("is $expected at $hours:00", ({ hours, expected }) => {
       const ratio = get12HourRatio({
+        getMilliseconds: () => 0,
         getSeconds: () => 0,
         getMinutes: () => 0,
         getHours: () => hours,
+        getDay: () => 0,
       });
       expect(ratio).toBe(expected);
     });
@@ -31,8 +33,11 @@ describe("Time Utils", () => {
       { minutes: 60, expected: 0 },
     ])("is $expected at 00:$minutes", ({ minutes, expected }) => {
       const ratio = getHourRatio({
+        getMilliseconds: () => 0,
         getSeconds: () => 0,
         getMinutes: () => minutes,
+        getHours: () => 0,
+        getDay: () => 0,
       });
       expect(ratio).toBe(expected);
     });

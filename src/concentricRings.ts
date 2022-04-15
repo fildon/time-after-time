@@ -1,6 +1,6 @@
 import h from "hyperscript";
 
-import { Circle, Line, SVG } from "./utils/svg";
+import { Circle, Line, RotationAnimation, SVG } from "./utils/svg";
 import { get12HourRatio, getHourRatio, getMinuteRatio } from "./utils/time";
 
 const createHourMarkers = () =>
@@ -14,10 +14,12 @@ const createHourMarkers = () =>
       x2: 85 * x,
       y2: 85 * y,
       color: i === 0 ? "red" : "black",
-      rotationOpts: {
-        duration: "12h",
-        startOffset: get12HourRatio(new Date()),
-      },
+      children: [
+        RotationAnimation({
+          duration: "12h",
+          startOffset: get12HourRatio(new Date()),
+        }),
+      ],
     });
   });
 
@@ -34,10 +36,12 @@ const createMinuteMarkers = () =>
       y2: (75 - length) * y,
       strokeWidth: 2,
       color: i === 0 ? "red" : "black",
-      rotationOpts: {
-        duration: "1h",
-        startOffset: getHourRatio(new Date()),
-      },
+      children: [
+        RotationAnimation({
+          duration: "1h",
+          startOffset: getHourRatio(new Date()),
+        }),
+      ],
     });
   });
 
@@ -54,10 +58,12 @@ const createSecondMarkers = () =>
       y2: (55 - length) * y,
       strokeWidth: 2,
       color: i === 0 ? "red" : "black",
-      rotationOpts: {
-        duration: "60s",
-        startOffset: getMinuteRatio(new Date()),
-      },
+      children: [
+        RotationAnimation({
+          duration: "60s",
+          startOffset: getMinuteRatio(new Date()),
+        }),
+      ],
     });
   });
 
