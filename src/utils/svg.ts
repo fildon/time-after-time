@@ -116,7 +116,7 @@ export const Rectangle = ({
   );
 
   Object.entries({
-    "stroke-width": "5",
+    "stroke-width": "2",
     fill,
     height: "50",
     stroke: color,

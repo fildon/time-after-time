@@ -1,15 +1,19 @@
 import h from "hyperscript";
-import { Group, Rectangle, SVGBuilder } from "./utils/svg";
+import { Group, Line, Rectangle, SVGBuilder } from "./utils/svg";
 import { createTimeRatioGetter } from "./utils/time";
 
 /**
- * @param duration - duration in seconds for a full cycle
- * @param yOffset - Distance in viewBox units to offset the bar from the top
+ * @param duration - Duration in seconds for a full cycle.
+ * @param yOffset - Distance in viewBox units to offset the bar from the top.
  * @param id - Must be globally unique! Or the animations might break.
+ * @param sectionCount - How seconds should be separated by markers.
  */
-const createLoadingBar = (duration: number, yOffset: number, id: string) => {
-  const containerBox = Rectangle({ yOffset, width: 180 });
-
+const createLoadingBar = (
+  duration: number,
+  yOffset: number,
+  id: string,
+  sectionCount: number
+) => {
   const timeRatioGetter = createTimeRatioGetter(duration);
   const initialTimeRatio = timeRatioGetter(new Date());
 
@@ -46,18 +50,27 @@ const createLoadingBar = (duration: number, yOffset: number, id: string) => {
     color: "green",
     fill: "green",
     yOffset,
-    width: 100,
   });
   animatedBar.appendChild(initialToFull);
   animatedBar.appendChild(emptyToInitial);
 
-  return Group(animatedBar, containerBox);
+  const gapBetweenMarkers = 180 / sectionCount;
+  // Fence-post theory: we have n+1 fence posts for n sections of fence.
+  // But we also don't need the first or last fence post because of the containing box
+  // so we only need sectionCount + 1 - 2 = sectionCount - 1
+  const markers = new Array(sectionCount - 1).fill(null).map((_, i) => {
+    const x = (i + 1) * gapBetweenMarkers - 90;
+    return Line({ x1: x, y1: yOffset, x2: x, y2: yOffset + 5, strokeWidth: 1 });
+  });
+
+  const containerBox = Rectangle({ yOffset, width: 180 });
+  return Group(animatedBar, ...markers, containerBox);
 };
 
 export const LoadingBar = () => {
-  const hourBar = createLoadingBar(24 * 60 * 60, -95, "hour");
-  const minuteBar = createLoadingBar(60 * 60, -25, "minute");
-  const secondBar = createLoadingBar(60, 45, "second");
+  const hourBar = createLoadingBar(24 * 60 * 60, -95, "hour", 24);
+  const minuteBar = createLoadingBar(60 * 60, -25, "minute", 12);
+  const secondBar = createLoadingBar(60, 45, "second", 12);
 
   const svg = SVGBuilder()
     .with(hourBar)
