@@ -80,7 +80,12 @@ export const LoadingBar = (now: Time) => {
     h("h2", "Loading Bar"),
     h(
       "p",
-      "The three clock hands are replaced with loading bars. The first bar shows progress from midnight to midnight. The second bar shows progress in the current hour. The third bar shows progress in the current minute."
+      `
+        The three clock hands are replaced with loading bars.
+        The first bar shows progress from midnight to midnight.
+        The second bar shows progress in the current hour.
+        The third bar shows progress in the current minute.
+      `
     ),
     svg
   );

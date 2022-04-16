@@ -15,7 +15,12 @@ toMatchInlineSnapshot(`
     24 hour clock face
   </h2>
   <p>
-    The usual 12 radial markers are displayed in large. An additional 12 smaller blue markers are interleaved providing 24 markers, one for each hour of the day. The hour hand (displayed in blue) moves only a half as fast as on a conventional 12 hour clock face. It completes one rotation only once per full day.
+    
+        The usual 12 radial markers are displayed in large.
+        An additional 12 smaller blue markers are interleaved providing 24 markers, one for each hour of the day.
+        The hour hand (displayed in blue) moves only a half as fast as on a conventional 12 hour clock face.
+        It completes one rotation only once per full day.
+      
   </p>
   <svg
     viewBox="-100 -100 200 200"

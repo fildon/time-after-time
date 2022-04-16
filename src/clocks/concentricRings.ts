@@ -14,15 +14,16 @@ const createHourMarkers = (now: Time) =>
     const x = Math.sin(ratio * Math.PI * 2);
     const y = -Math.cos(ratio * Math.PI * 2);
     return Line({
-      x1: 95 * x,
-      y1: 95 * y,
+      x1: 94 * x,
+      y1: 94 * y,
       x2: 85 * x,
       y2: 85 * y,
       color: i === 0 ? "red" : "black",
       children: [
         RotationAnimation({
           duration: "12h",
-          startOffset: get12HourRatio(now),
+          startOffset: 1 - get12HourRatio(now),
+          reverse: true,
         }),
       ],
     });
@@ -44,7 +45,8 @@ const createMinuteMarkers = (now: Time) =>
       children: [
         RotationAnimation({
           duration: "1h",
-          startOffset: getHourRatio(now),
+          startOffset: 1 - getHourRatio(now),
+          reverse: true,
         }),
       ],
     });
@@ -66,7 +68,8 @@ const createSecondMarkers = (now: Time) =>
       children: [
         RotationAnimation({
           duration: "60s",
-          startOffset: getMinuteRatio(now),
+          startOffset: 1 - getMinuteRatio(now),
+          reverse: true,
         }),
       ],
     });
@@ -81,13 +84,16 @@ export const ConcentricRings = (now: Time) => {
   const minuteMarkers = createMinuteMarkers(now);
   const secondMarkers = createSecondMarkers(now);
 
+  const hand = Line({ y2: -97, strokeWidth: 1, color: "blue" });
+
   const svg = SVG(
     ...hourMarkers,
     ...minuteMarkers,
     ...secondMarkers,
     hourCircle,
     minuteCircle,
-    secondCircle
+    secondCircle,
+    hand
   );
 
   return h(
@@ -95,7 +101,15 @@ export const ConcentricRings = (now: Time) => {
     h("h2", "Concentric Rings"),
     h(
       "p",
-      "Concentric rings rotate around a common centre. The outer most ring rotates once every 12 hours. The middle ring once every hour. The innermost ring once every minute. Red markers correspond to the zero on each ring."
+      `
+        Concentric rings rotate anticlockwise around a common centre.
+        The outer most ring rotates once every 12 hours.
+        The middle ring once every hour.
+        The innermost ring once every minute.
+        Red markers correspond to the zero on each ring.
+        A static blue hand marks the vertical.
+        The static hand can be thought of as moving relatively clockwise compared to the faces.
+      `
     ),
     svg
   );

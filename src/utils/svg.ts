@@ -97,6 +97,7 @@ export const Rectangle = ({
 type RotationOpts = {
   startOffset: number;
   duration: `${number}${"h" | "min" | "s" | "ms"}`;
+  reverse?: boolean;
 };
 
 /**
@@ -107,18 +108,31 @@ type RotationOpts = {
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Content_type#clock-value
  */
-export const RotationAnimation = ({ startOffset, duration }: RotationOpts) => {
+export const RotationAnimation = ({
+  startOffset,
+  duration,
+  reverse = false,
+}: RotationOpts) => {
   const animation = document.createElementNS(
     "http://www.w3.org/2000/svg",
     "animateTransform"
   );
 
+  let [from, to] = [
+    `${360 * startOffset} 0 0`,
+    `${360 * startOffset + 360} 0 0`,
+  ];
+
+  if (reverse) {
+    [from, to] = [to, from];
+  }
+
   Object.entries({
     attributeName: "transform",
     attributeType: "XML",
     type: "rotate",
-    from: `${360 * startOffset} 0 0`,
-    to: `${360 * startOffset + 360} 0 0`,
+    from,
+    to,
     dur: duration,
     repeatCount: "indefinite",
   }).forEach(([k, v]) => animation.setAttribute(k, v));

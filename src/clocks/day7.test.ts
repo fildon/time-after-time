@@ -15,7 +15,12 @@ toMatchInlineSnapshot(`
     7 day clock face
   </h2>
   <p>
-    There are 7 days in a week. The day hand (displayed in green) treats the midnight between Saturday and Sunday as the start of the week, and completes a full rotation exactly once per week. Each radial marker represents one day.
+    
+        There are 7 days in a week.
+        The day hand (displayed in green) treats the midnight between Saturday and Sunday as the start of the week.
+        It completes a full rotation exactly once per week.
+        Each radial marker represents one day.
+      
   </p>
   <svg
     viewBox="-100 -100 200 200"

@@ -15,7 +15,12 @@ toMatchInlineSnapshot(`
     Loading Bar
   </h2>
   <p>
-    The three clock hands are replaced with loading bars. The first bar shows progress from midnight to midnight. The second bar shows progress in the current hour. The third bar shows progress in the current minute.
+    
+        The three clock hands are replaced with loading bars.
+        The first bar shows progress from midnight to midnight.
+        The second bar shows progress in the current hour.
+        The third bar shows progress in the current minute.
+      
   </p>
   <svg
     viewBox="-100 -100 200 200"
