@@ -76,24 +76,24 @@ const createSecondMarkers = (now: Time) =>
   });
 
 export const ConcentricRings = (now: Time) => {
-  const hourCircle = Circle();
-  const minuteCircle = Circle({ r: 75 });
-  const secondCircle = Circle({ r: 55 });
+  const hand = Line({ y2: -97, strokeWidth: 1, color: "blue" });
 
   const hourMarkers = createHourMarkers(now);
   const minuteMarkers = createMinuteMarkers(now);
   const secondMarkers = createSecondMarkers(now);
 
-  const hand = Line({ y2: -97, strokeWidth: 1, color: "blue" });
+  const hourCircle = Circle();
+  const minuteCircle = Circle({ r: 75 });
+  const secondCircle = Circle({ r: 55 });
 
   const svg = SVG(
+    hand,
     ...hourMarkers,
     ...minuteMarkers,
     ...secondMarkers,
     hourCircle,
     minuteCircle,
-    secondCircle,
-    hand
+    secondCircle
   );
 
   return h(

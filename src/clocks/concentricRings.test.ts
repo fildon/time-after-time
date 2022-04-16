@@ -29,6 +29,15 @@ toMatchInlineSnapshot(`
     viewBox="-100 -100 200 200"
   >
     <line
+      stroke="blue"
+      stroke-linecap="round"
+      stroke-width="1"
+      x1="0"
+      x2="0"
+      y1="0"
+      y2="-97"
+    />
+    <line
       stroke="red"
       stroke-linecap="round"
       stroke-width="5"
@@ -2559,15 +2568,6 @@ toMatchInlineSnapshot(`
       r="55"
       stroke="black"
       stroke-width="5"
-    />
-    <line
-      stroke="blue"
-      stroke-linecap="round"
-      stroke-width="1"
-      x1="0"
-      x2="0"
-      y1="0"
-      y2="-97"
     />
   </svg>
 </article>
