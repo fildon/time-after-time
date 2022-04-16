@@ -1,3 +1,54 @@
 * {
+  box-sizing: border-box;
+  padding: 0;
   max-width: 60ch;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  max-width: none;
+  line-height: 1.5rem;
+}
+
+body {
+  margin: 0 auto;
+  font-family: Arial, Helvetica, sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+body > * {
+  margin: 0 auto 0;
+}
+body > * + * {
+  margin-top: 1rem;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: min(80vw, 300ch);
+  justify-content: center;
+}
+
+main > * {
+  margin: 0 1rem 0;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem;
+  padding: 1rem;
+  border: 1px solid grey;
+  border-radius: 1rem;
+}
+
+article > svg {
+  margin-top: auto;
 }
