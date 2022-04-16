@@ -6,14 +6,16 @@ import { Day7 } from "./clocks/day7";
 import { ConcentricRings } from "./clocks/concentricRings";
 import { LoadingBar } from "./clocks/loadingBar";
 
-const mainElement = document.getElementsByTagName("main")[0];
-mainElement.appendChild(h("h1", "Time after Time"));
-mainElement.appendChild(
+const bodyElement = document.getElementsByTagName("body")[0];
+bodyElement.appendChild(h("h1", "Time after Time"));
+bodyElement.appendChild(
   h("p", "An exploration of alternative visualizations of time")
 );
 
-const now = new Date();
+const mainElement = h("main");
+bodyElement.appendChild(mainElement);
 
+const now = new Date();
 [Classic12, Classic24, Day7, ConcentricRings, LoadingBar].forEach((clock) =>
   mainElement.appendChild(clock(now))
 );
