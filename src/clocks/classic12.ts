@@ -1,7 +1,12 @@
 import h from "hyperscript";
 
-import { Circle, Line, RotationAnimation, SVG } from "./utils/svg";
-import { get12HourRatio, getHourRatio, getMinuteRatio } from "./utils/time";
+import { Circle, Line, RotationAnimation, SVG } from "../utils/svg";
+import {
+  get12HourRatio,
+  getHourRatio,
+  getMinuteRatio,
+  Time,
+} from "../utils/time";
 
 const createHourMarkers = () =>
   new Array(12).fill(null).map((_, i) => {
@@ -16,12 +21,12 @@ const createHourMarkers = () =>
     });
   });
 
+type Foo = SVGElement;
+
 /**
  * Constructs element containing an animated 12 hour clock face
  */
-export const Classic12 = () => {
-  const now = new Date();
-
+export const Classic12 = (now: Time) => {
   const hourHand = Line({
     y2: -60,
     children: [

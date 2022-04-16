@@ -1,10 +1,10 @@
 import h from "hyperscript";
 
-import { Classic12 } from "./classic12";
-import { Classic24 } from "./classic24";
-import { Day7 } from "./day7";
-import { ConcentricRings } from "./concentricRings";
-import { LoadingBar } from "./loadingBar";
+import { Classic12 } from "./clocks/classic12";
+import { Classic24 } from "./clocks/classic24";
+import { Day7 } from "./clocks/day7";
+import { ConcentricRings } from "./clocks/concentricRings";
+import { LoadingBar } from "./clocks/loadingBar";
 
 const mainElement = document.getElementsByTagName("main")[0];
 mainElement.appendChild(h("h1", "Time after Time"));
@@ -12,8 +12,10 @@ mainElement.appendChild(
   h("p", "An exploration of alternative visualizations of time")
 );
 
+const now = new Date();
+
 [Classic12, Classic24, Day7, ConcentricRings, LoadingBar].forEach((clock) =>
-  mainElement.appendChild(clock())
+  mainElement.appendChild(clock(now))
 );
 
 // TODO

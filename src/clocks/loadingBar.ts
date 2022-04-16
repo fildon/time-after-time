@@ -1,6 +1,6 @@
 import h from "hyperscript";
-import { Group, Line, Rectangle, SVG } from "./utils/svg";
-import { createTimeRatioGetter } from "./utils/time";
+import { Group, Line, Rectangle, SVG } from "../utils/svg";
+import { createTimeRatioGetter, Time } from "../utils/time";
 
 /**
  * @param duration - Duration in seconds for a full cycle.
@@ -9,13 +9,14 @@ import { createTimeRatioGetter } from "./utils/time";
  * @param sectionCount - How seconds should be separated by markers.
  */
 const createLoadingBar = (
+  now: Time,
   duration: number,
   yOffset: number,
   id: string,
   sectionCount: number
 ) => {
   const timeRatioGetter = createTimeRatioGetter(duration);
-  const initialTimeRatio = timeRatioGetter(new Date());
+  const initialTimeRatio = timeRatioGetter(now);
 
   /**
    * This double animation element is necessary to handle the two separate linear animations from inital to end and start to initial
@@ -67,10 +68,10 @@ const createLoadingBar = (
   return Group(animatedBar, ...markers, containerBox);
 };
 
-export const LoadingBar = () => {
-  const hourBar = createLoadingBar(24 * 60 * 60, -95, "hour", 24);
-  const minuteBar = createLoadingBar(60 * 60, -25, "minute", 12);
-  const secondBar = createLoadingBar(60, 45, "second", 12);
+export const LoadingBar = (now: Time) => {
+  const hourBar = createLoadingBar(now, 24 * 60 * 60, -95, "hour", 24);
+  const minuteBar = createLoadingBar(now, 60 * 60, -25, "minute", 12);
+  const secondBar = createLoadingBar(now, 60, 45, "second", 12);
 
   const svg = SVG(hourBar, minuteBar, secondBar);
 

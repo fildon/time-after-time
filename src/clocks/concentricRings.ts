@@ -1,9 +1,14 @@
 import h from "hyperscript";
 
-import { Circle, Line, RotationAnimation, SVG } from "./utils/svg";
-import { get12HourRatio, getHourRatio, getMinuteRatio } from "./utils/time";
+import { Circle, Line, RotationAnimation, SVG } from "../utils/svg";
+import {
+  get12HourRatio,
+  getHourRatio,
+  getMinuteRatio,
+  Time,
+} from "../utils/time";
 
-const createHourMarkers = () =>
+const createHourMarkers = (now: Time) =>
   new Array(12).fill(null).map((_, i) => {
     const ratio = i / 12;
     const x = Math.sin(ratio * Math.PI * 2);
@@ -17,13 +22,13 @@ const createHourMarkers = () =>
       children: [
         RotationAnimation({
           duration: "12h",
-          startOffset: get12HourRatio(new Date()),
+          startOffset: get12HourRatio(now),
         }),
       ],
     });
   });
 
-const createMinuteMarkers = () =>
+const createMinuteMarkers = (now: Time) =>
   new Array(60).fill(null).map((_, i) => {
     const ratio = i / 60;
     const x = Math.sin(ratio * Math.PI * 2);
@@ -39,13 +44,13 @@ const createMinuteMarkers = () =>
       children: [
         RotationAnimation({
           duration: "1h",
-          startOffset: getHourRatio(new Date()),
+          startOffset: getHourRatio(now),
         }),
       ],
     });
   });
 
-const createSecondMarkers = () =>
+const createSecondMarkers = (now: Time) =>
   new Array(60).fill(null).map((_, i) => {
     const ratio = i / 60;
     const x = Math.sin(ratio * Math.PI * 2);
@@ -61,20 +66,20 @@ const createSecondMarkers = () =>
       children: [
         RotationAnimation({
           duration: "60s",
-          startOffset: getMinuteRatio(new Date()),
+          startOffset: getMinuteRatio(now),
         }),
       ],
     });
   });
 
-export const ConcentricRings = () => {
+export const ConcentricRings = (now: Time) => {
   const hourCircle = Circle();
   const minuteCircle = Circle({ r: 75 });
   const secondCircle = Circle({ r: 55 });
 
-  const hourMarkers = createHourMarkers();
-  const minuteMarkers = createMinuteMarkers();
-  const secondMarkers = createSecondMarkers();
+  const hourMarkers = createHourMarkers(now);
+  const minuteMarkers = createMinuteMarkers(now);
+  const secondMarkers = createSecondMarkers(now);
 
   const svg = SVG(
     ...hourMarkers,

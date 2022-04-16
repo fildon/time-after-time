@@ -1,12 +1,13 @@
 import h from "hyperscript";
 
-import { Circle, Line, RotationAnimation, SVG } from "./utils/svg";
+import { Circle, Line, RotationAnimation, SVG } from "../utils/svg";
 import {
   getWeekRatio,
   get12HourRatio,
   getHourRatio,
   getMinuteRatio,
-} from "./utils/time";
+  Time,
+} from "../utils/time";
 
 const createDayMarkers = () =>
   new Array(7).fill(null).map((_, i) => {
@@ -25,9 +26,7 @@ const createDayMarkers = () =>
 /**
  * Constructs element containing an animated 7 day clock face
  */
-export const Day7 = () => {
-  const now = new Date();
-
+export const Day7 = (now: Time) => {
   const dayHand = Line({
     y2: -60,
     color: "green",
