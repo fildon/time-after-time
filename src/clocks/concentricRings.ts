@@ -76,7 +76,7 @@ const createSecondMarkers = (now: Time) =>
   });
 
 export const ConcentricRings = (now: Time) => {
-  const hand = Line({ y2: -97, strokeWidth: 1, color: "blue" });
+  const hand = Line({ y2: -97, strokeWidth: 1, color: "grey" });
 
   const hourMarkers = createHourMarkers(now);
   const minuteMarkers = createMinuteMarkers(now);
@@ -107,7 +107,7 @@ export const ConcentricRings = (now: Time) => {
         The middle ring once every hour.
         The innermost ring once every minute.
         Red markers correspond to the zero on each ring.
-        A static blue hand marks the vertical.
+        A static grey hand marks the vertical.
         The static hand can be thought of as moving relatively clockwise compared to the faces.
       `
     ),

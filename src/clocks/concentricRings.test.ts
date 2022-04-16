@@ -21,7 +21,7 @@ toMatchInlineSnapshot(`
         The middle ring once every hour.
         The innermost ring once every minute.
         Red markers correspond to the zero on each ring.
-        A static blue hand marks the vertical.
+        A static grey hand marks the vertical.
         The static hand can be thought of as moving relatively clockwise compared to the faces.
       
   </p>
@@ -29,7 +29,7 @@ toMatchInlineSnapshot(`
     viewBox="-100 -100 200 200"
   >
     <line
-      stroke="blue"
+      stroke="grey"
       stroke-linecap="round"
       stroke-width="1"
       x1="0"
