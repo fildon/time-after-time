@@ -8,19 +8,19 @@ An exploration in alternative visualizations of time. Deployed at [time-after-ti
 
 Prerequisites:
 
-- Node
-- NPM
+- [Node](https://nodejs.org/en/)
+- [pnpm](https://pnpm.io/installation)
 
 Install dependencies:
 
 ```shell
-npm install
+pnpm i
 ```
 
 Build the project:
 
 ```shell
-npm run build
+pnpm build
 ```
 
 Then you can view the result by opening the `dist/index.html` in your favourite browser.
@@ -30,7 +30,7 @@ Then you can view the result by opening the `dist/index.html` in your favourite 
 Testing is provided by ts-jest, and can be run with:
 
 ```shell
-npm run test
+pnpm test
 ```
 
 ## Deployment
